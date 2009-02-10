@@ -71,7 +71,6 @@ class UpcomingAPI {
         }
         
         $key = $this->build_key($url, $req_per_hour);
-        echo $key."\n";
         $value = $this->memcache->get($key);
         if (!$value) {
             $value = $this->perform_request($url);
