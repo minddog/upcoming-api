@@ -1,6 +1,25 @@
 <?php;
-
-require_once 'unparse_str.php';
+/*
+ * UpcomingAPI - An up to date fully implemented api client for Upcoming.org
+ *
+ * Copyright(c) 2009 Adam Ballai <aballai@gmail.com>
+ *
+ * Example Usage
+ * $api_host = 'upcoming.yahooapis.com/services/rest/';
+ * $api_key = 'xxxxxxxx';
+ * $cache_config['memcache_servers'] = array("localhost");
+ * $cache_config['memcache_port'] = 11211;
+ * $cache_config['key_prefix'] = "upcoming";
+ *
+ * $api = new UpcomingAPI($api_host,
+                          $api_key,
+                          $cache_config);
+ * $result = $api->event->search(array('search_text' => 'earthday'));
+ * foreach($result["list"] as $event) {
+ *    echo $event["name"];
+ * }
+ *
+ */
 
 class UpcomingAPIError extends Exception {}
 
@@ -104,7 +123,7 @@ class UpcomingAPI {
         $url = ('http://' . $this->api_host
                 . '/?method=' . $namespace
                 . '.' . $method
-                . '&' . unparse_str($args));
+                . '&' . http_build_query($args));
 
         $result = $this->fetch($url);
         
