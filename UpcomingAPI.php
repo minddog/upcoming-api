@@ -132,10 +132,6 @@ class UpcomingAPI {
         if (isset($result['error'])) {
             throw new UpcomingAPIError($result['error'], $result['code']);
         } else {
-            // Cache the result.
-            if ($this->client_cache) {
-                apc_store($url, serialize($result['result']), APC_TTL);
-            }
             return $result['result'];
         }
     }
