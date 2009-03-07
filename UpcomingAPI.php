@@ -74,7 +74,6 @@ class UpcomingAPI {
         $value = $this->memcache->get($key);
         if (!$value) {
             $value = $this->perform_request($url);
-            if (!$value) return null;
             $value = json_encode($value);
             $this->memcache->set($key, $value);
         }
@@ -139,8 +138,14 @@ class UpcomingAPI {
         $error = NULL;
         $result = NULL;
         
-        $doc = DOMDocument::loadXML($xml);
+        $doc = @DOMDocument::loadXML($xml);
+        if(!$doc) {
+            throw new UpcomingAPIError('Server Unavailable', 500);
+        }
         $rsp = $doc->getElementsByTagName('rsp')->item(0);
+        if(!$rsp) {
+            throw new UpcomingAPIError('Server Unavailable', 500);
+        }
         $result['stat'] = $rsp->getAttribute('stat');
         $result['count'] = $rsp->getAttribute('resultcount');
     
